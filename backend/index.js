@@ -22,7 +22,15 @@ if (ENV.NODE_ENV === "production") {
     res.sendFile(path.join(_dirname, "../admin", "dist", "index.html"));
   });
 }
-app.listen(ENV.PORT, () => {
-  console.log(`listening to the port ${port}`);
-  connectDB();
-});
+// app.listen(ENV.PORT, () => {
+//   console.log(`listening to the port ${port}`);
+//   connectDB();
+// });
+
+const startServer = async () => {
+  await connectDB();
+  app.listen(ENV.PORT, () => {
+    console.log(`listening to the port ${port}`);
+  });
+};
+startServer();
