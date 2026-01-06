@@ -1,7 +1,10 @@
 import express from "express";
 import path from "path";
 import { ENV } from "./config/env.js";
+import { connectDB } from "./config/db.js";
+import { clerkMiddleware } from "@clerk/express";
 const app = express();
+app.use(clerkMiddleware());
 const _dirname = path.resolve();
 const port = process.env.PORT;
 app.get("/api/health", (req, res) => {
@@ -21,4 +24,5 @@ if (ENV.NODE_ENV === "production") {
 }
 app.listen(ENV.PORT, () => {
   console.log(`listening to the port ${port}`);
+  connectDB();
 });
