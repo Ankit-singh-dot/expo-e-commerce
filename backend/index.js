@@ -19,22 +19,36 @@ app.get("/api/health", (req, res) => {
 });
 
 // development
-if (ENV.NODE_ENV === "production") {
-  app.use(express.static(path.join(_dirname, "../admin/dist")));
+// if (ENV.NODE_ENV === "production") {
+//   app.use(express.static(path.join(_dirname, "../admin/dist")));
 
-  app.get("/{*any}", (req, res) => {
-    res.sendFile(path.join(_dirname, "../admin", "dist", "index.html"));
-  });
-}
+//   app.get("/{*any}", (req, res) => {
+//     res.sendFile(path.join(_dirname, "../admin", "dist", "index.html"));
+//   });
+// }
 // app.listen(ENV.PORT, () => {
-//   console.log(`listening to the port ${port}`);
-//   connectDB();
-// });
 
-const startServer = async () => {
+// });
+// LOCAL DEVELOPMENT
+if (ENV.NODE_ENV !== "production") {
+  const startServer = async () => {
+    await connectDB();
+    app.listen(ENV.PORT, () => {
+      console.log(`Local server running on port ${ENV.PORT}`);
+    });
+  };
+
+  startServer();
+}
+
+// const startServer = async () => {
+//   await connectDB();
+//   app.listen(ENV.PORT, () => {
+//     console.log(`listening to the port ${port}`);
+//   });
+// };
+// startServer();
+export default async (req, res) => {
   await connectDB();
-  app.listen(ENV.PORT, () => {
-    console.log(`listening to the port ${port}`);
-  });
+  return app(req, res);
 };
-startServer();
