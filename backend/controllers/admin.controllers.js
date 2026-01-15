@@ -161,3 +161,32 @@ export async function getAllCustomers(req, res) {
     });
   }
 }
+
+export async function getDashboardStats() {
+  try {
+    const totalOrders = await Order.countDocuments();
+    const revenueResult = await Order.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$totalPrice" },
+        },
+      },
+    ]);
+
+    const totalRevenue = revenueResult[0]?.total || 0;
+    const totalCostumer = await User.countDocuments();
+    const totalProducts = await Product.countDocuments();
+    res.status(200).json({
+      totalRevenue,
+      totalCostumer,
+      totalProducts,
+      totalOrders,
+    });
+  } catch (error) {
+    console.error("Error fetching dashboard Status", error);
+    return res.status(500).json({
+      error: "Interval server error ",
+    });
+  }
+}
