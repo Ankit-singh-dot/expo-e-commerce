@@ -98,8 +98,11 @@ export async function updateProducts(req, res) {
 
 export async function getAllOrders(req, res) {
   try {
-    const order = await Order.find().sort({ createdAt: -1 });
-    res.status(200).json(order);
+    const order = await Order.find()
+      .populate("user", "name email")
+      .populate("orderItems.products")
+      .sort({ createdAt: -1 });
+    res.status(200).json({ order });
   } catch (error) {
     console.error("Error fetching order:", error);
     res.status(500).json({
@@ -108,10 +111,8 @@ export async function getAllOrders(req, res) {
   }
 }
 
-export async function updateOrderStatus(req,res){
-    try {
-        const 
-    } catch (error) {
-        
-    }
+export async function updateOrderStatus(req, res) {
+  try {
+    const { id } = req.params;
+  } catch (error) {}
 }
