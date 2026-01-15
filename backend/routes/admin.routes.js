@@ -11,4 +11,8 @@ router.use(protectedRoute, adminOnly);
 router.post("/products", upload.array("images", 3), createProducts);
 router.get("/products", getAllProducts);
 router.put("/products/:id", upload.array("images", 3), updateProducts);
+
+router.get("/order", getAllOrders);
+// pending => shipped => delivered
+router.patch("/order/:orderId", updateOrderStatus);
 export default router;
