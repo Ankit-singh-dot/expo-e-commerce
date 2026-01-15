@@ -1,6 +1,6 @@
 import { requireAuth } from "@clerk/express";
-import { User } from "../models/user.model";
-import { ENV } from "../config/env";
+import { User } from "../models/user.model.js";
+import { ENV } from "../config/env.js";
 export const protectedRoute = [
   requireAuth(),
   async (req, res, next) => {
