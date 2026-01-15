@@ -1,7 +1,11 @@
 import { Router } from "express";
 import {
   createProducts,
+  getAllCustomers,
+  getAllOrders,
   getAllProducts,
+  getDashboardStats,
+  updateOrderStatus,
   updateProducts,
 } from "../controllers/admin.controllers.js";
 import { adminOnly, protectedRoute } from "../middleware/auth.middleware.js";
