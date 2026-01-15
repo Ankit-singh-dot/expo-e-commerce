@@ -53,5 +53,24 @@ export async function getAllProducts(req, res) {
   }
 }
 export async function updateProducts(req, res) {
-    
+  try {
+    const { id } = req.params;
+    const { name, description, price, stock, category } = req.body;
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        message: "product not found ",
+      });
+    }
+    if (name) product.name = name;
+    if (description) product.description = description;
+    if (price) product.price = price;
+    if (stock !== undefined) product.stock = parseInt(stock);
+    if (category) product.category = category;
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 }
