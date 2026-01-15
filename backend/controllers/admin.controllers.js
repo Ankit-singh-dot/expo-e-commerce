@@ -67,6 +67,25 @@ export async function updateProducts(req, res) {
     if (price) product.price = price;
     if (stock !== undefined) product.stock = parseInt(stock);
     if (category) product.category = category;
+
+    // for cloudinary images upload
+
+    if (req.files & (req.files.length > 0)) {
+      if (req.files.length > 3) {
+        return res.status(400).json({
+          message: "maximum 3 images are allowed",
+        });
+      }
+
+      const uploadPromises = req.files.map((file) => {
+        return cloudinary.uploader(file.path, {
+          folder: "products",
+        });
+      });
+      const uploadResults = await Promise.all(uploadPromises);
+      product.images = uploadResults.map((result) => result.secure_url);
+    }
+    await product.save();
   } catch (error) {
     console.error("Error updating product:", error);
     res.status(500).json({
