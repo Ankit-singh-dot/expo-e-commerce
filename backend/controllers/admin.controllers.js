@@ -41,5 +41,17 @@ export async function createProducts(req, res) {
     });
   }
 }
-export async function getAllProducts(req, res) {}
-export async function updateProducts(req, res) {}
+export async function getAllProducts(req, res) {
+  try {
+    const product = await Product.find().sort({ createdAt: -1 });
+    res.status(200).json(product);
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+}
+export async function updateProducts(req, res) {
+    
+}
