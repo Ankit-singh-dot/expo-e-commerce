@@ -113,6 +113,36 @@ export async function getAllOrders(req, res) {
 
 export async function updateOrderStatus(req, res) {
   try {
-    const { id } = req.params;
-  } catch (error) {}
+    const { orderId } = req.params;
+    const { status } = req.body;
+    if (!["pending", "shipped", "delivered"].includes(status)) {
+      return res.status(400).json({
+        error: "Order not found",
+      });
+    }
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(400).json({
+        error: "Order not found ",
+      });
+    }
+    order.status = status;
+
+    if (status === "shipped" && !order.shippedAt) {
+      order.shippedAt = new Date();
+    }
+    if (status === "delivered" && !order.deliveredAt) {
+      order.deliveredAt = new Date();
+    }
+    await order.save();
+    return res.status(200).json({
+      message: "Order status updated successfully",
+      order,
+    });
+  } catch (error) {
+    console.error("Error in updateOrderStatus controllers:", error);
+    return res.status(500).json({
+      error: "Interval server error ",
+    });
+  }
 }
