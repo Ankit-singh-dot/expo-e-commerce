@@ -1,6 +1,7 @@
 import cloudinary from "../config/cloudinary.js";
 import { Product } from "../models/product.model.js";
 import { Order } from "../models/order.model.js";
+import { User } from "../models/user.model.js";
 export async function createProducts(req, res) {
   try {
     const { name, description, price, stock, category } = req.body;
@@ -141,6 +142,20 @@ export async function updateOrderStatus(req, res) {
     });
   } catch (error) {
     console.error("Error in updateOrderStatus controllers:", error);
+    return res.status(500).json({
+      error: "Interval server error ",
+    });
+  }
+}
+
+export async function getAllCustomers(req, res) {
+  try {
+    const customers = await User.find().sort({ createdAt: -1 });
+    return res.status(200).json({
+      customers,
+    });
+  } catch (error) {
+    console.error("Error fetching customers:", error);
     return res.status(500).json({
       error: "Interval server error ",
     });

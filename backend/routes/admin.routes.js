@@ -15,4 +15,7 @@ router.put("/products/:id", upload.array("images", 3), updateProducts);
 router.get("/order", getAllOrders);
 // pending => shipped => delivered
 router.patch("/order/:orderId", updateOrderStatus);
+
+router.get("/customers", getAllCustomers);
+router.get("/customers", getDashboardStats);
 export default router;
