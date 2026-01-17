@@ -6,6 +6,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { serve } from "inngest/express";
 import { functions, inngest } from "./config/inggest.js";
 import adminRoutes from "./routes/admin.routes.js"
+import userRoutes from "./routes/user.routes.js";
 const app = express();
 app.use(express.json());
 app.use(clerkMiddleware());
@@ -13,6 +14,7 @@ const _dirname = path.resolve();
 const port = process.env.PORT;
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/admin",adminRoutes)
+app.use("/api/user",userRoutes)
 app.get("/api/health", (req, res) => {
   return res.status(200).json({
     message: "api is working",
