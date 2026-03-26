@@ -4,6 +4,7 @@ import { ENV } from "./config/env.js";
 import { connectDB } from "./config/db.js";
 import { clerkMiddleware } from "@clerk/express";
 import { serve } from "inngest/express";
+import cors from "cors";
 import { functions, inngest } from "./config/inggest.js";
 import adminRoutes from "./routes/admin.routes.js"
 import userRoutes from "./routes/user.routes.js";
@@ -12,6 +13,12 @@ app.use(express.json());
 app.use(clerkMiddleware());
 const _dirname = path.resolve();
 const port = process.env.PORT;
+app.use(
+  cors({
+    origin: "https://expo-e-commerce-kappa.vercel.app",
+    credentials: true,
+  })
+);
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/admin",adminRoutes)
 app.use("/api/user",userRoutes)
