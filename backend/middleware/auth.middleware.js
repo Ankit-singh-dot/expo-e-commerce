@@ -10,27 +10,28 @@ export const protectedRoute = [
         return res.status(401).json({
           message: "Unauthorized - invalid token",
         });
-
       const user = await User.findOne({ clerkId });
-      if (!user) return res.status(404).json({ message: "User not found" });
-
+      if (!user)
+        return res.status(401).json({
+          message: "user not found",
+        });
       req.user = user;
       next();
     } catch (error) {
-      res.status(500).json({
-        message: "Internal server error",
-      });
+      console.error("Error in protected middleware", error);
+      res.status(500).json({ message: "Internal server error " });
     }
   },
 ];
 
 export const adminOnly = (req, res, next) => {
   if (!req.user) {
-    return res.status(401).json({
-      message: "Unauthorized - user not found",
+    return res.status(401).json({ message: "Unauthorized - user not found " });
+  }
+  if (req.user.email !== ENV.ADMIN_EMAIL) {a
+    return res.status(403).json({
+      message: "Forbidden - admin access only",
     });
   }
-  if (req.user.email !== ENV.ADMIN_EMAIL) {
-    return res.status(403).json({ message: "Forbidden - admin access only" });
-  }
+  next();
 };
